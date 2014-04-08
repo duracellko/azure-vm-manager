@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Virtual Machines";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Virtual machines
+    </div>
+
+    <div id="azureManagerContainer" data-serviceurl="@Url.Content("~/api/VmManagement")">
+        <div id="errorPanel" class="alert alert-danger alert-dismissable" style="display: none">
+            <button type="button" class="close" data-bind="click: hideError">&times;</button>
+            <strong>Error:</strong> <span id="errorMessage"></span>
+        </div>
+        <div id="infoPanel" class="alert alert-info alert-dismissable" style="display: none">
+            <button type="button" class="close" data-bind="click: hideInfo">&times;</button>
+            <strong>Info:</strong>
+            <span id="infoMessage"
+                  data-startvm="Virtual machine is starting. Please, refresh to follow progress."
+                  data-stopvm="Virtual machine is shutting down. Please, refresh to follow progress."></span>
+        </div>
+
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Virtual machine</th>
+                    <th>Cloud service</th>
+                    <th>Status</th>
+                    <th class="text-right">
+                        <button type="button" class="btn btn-default" data-bind="click: refresh">
+                            <span class="glyphicon glyphicon-refresh"></span> Refresh
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: virtualMachines">
+                <tr data-bind="css: rowClassName">
+                    <td><span data-bind="text: name"></span></td>
+                    <td><span data-bind="text: cloudServiceName"></span></td>
+                    <td><span data-bind="text: statusDisplayName"></span></td>
+                    <td class="text-right">
+                        <button type="button" class="btn btn-default" data-bind="click: downloadRDP, visible: canDownloadRDP">
+                            <span class="glyphicon glyphicon-share"></span> Connect
+                        </button>
+                        <button type="button" class="btn btn-default" data-bind="click: startVM, visible: canStartVM">
+                            <span class="glyphicon glyphicon-play"></span> Start
+                        </button>
+                        <button type="button" class="btn btn-default" data-bind="click: stopVM, visible: canStopVM">
+                            <span class="glyphicon glyphicon-stop"></span> Shutdown
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var azureManagerContainer = $("#azureManagerContainer");
+            var azureManager = new Duracellko.AzureManager(
+                azureManagerContainer,
+                azureManagerContainer.attr("data-serviceurl"));
+            azureManager.initialize();
+            azureManager.refresh();
+        });
+    </script>
+}

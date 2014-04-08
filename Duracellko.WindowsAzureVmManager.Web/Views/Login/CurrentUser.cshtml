@@ -1,0 +1,26 @@
+﻿@model Duracellko.WindowsAzureVmManager.Web.Models.CurrentUserViewModel
+@{
+    Layout = "";
+}
+
+@if (Model.IsAuthenticated)
+{
+    string userName = (string.IsNullOrEmpty(Model.FirstName) && string.IsNullOrEmpty(Model.LastName)) ?
+        Model.Name : string.Format("{0} {1}", Model.FirstName, Model.LastName);
+    <text>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-text">
+                Hello, @userName!
+            </li>
+            <li>
+                @Html.ActionLink("Sign out", "SignOut", "Login")
+            </li>
+        </ul>
+    </text>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Sign in", "Index", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
