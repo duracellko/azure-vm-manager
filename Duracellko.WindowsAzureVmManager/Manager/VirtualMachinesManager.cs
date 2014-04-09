@@ -39,30 +39,9 @@ namespace Duracellko.WindowsAzureVmManager.Manager
             var getCloudServicesRequest = new GetCloudServicesRequest(this.client);
             var hostedServices = await getCloudServicesRequest.Submit(null);
 
-            var result = new List<VirtualMachineInfo>();
-            foreach (var hostedService in hostedServices.Services)
-            {
-                try
-                {
-                    var getProductionDeploymentRequest = new GetProductionDeploymentRequest(this.client);
-                    var deployment = await getProductionDeploymentRequest.Submit(hostedService.ServiceName);
-                    if (deployment != null)
-                    {
-                        result.AddRange(this.GetVirtualMachinesForDeployment(deployment, hostedService));
-                    }
-                }
-                catch (AzureManagementException ex)
-                {
-                    if (!string.Equals(ex.Code, "ResourceNotFound", StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw;
-                    }
-
-                    // ignore if deployment was not found
-                }
-            }
-
-            return result;
+            var getVirtualMachinesTasks = hostedServices.Services.Select(s => this.GetVirtualMachinesForServiceAsync(s)).ToArray();
+            var virtualMachines = await Task.WhenAll(getVirtualMachinesTasks);
+            return virtualMachines.Where(c => c != null).SelectMany(c => c).ToList();
         }
 
         public async Task<bool> StartVirtualMachine(string name, string cloudServiceName)
@@ -152,6 +131,30 @@ namespace Duracellko.WindowsAzureVmManager.Manager
         #endregion
 
         #region Private methods
+
+        private async Task<IEnumerable<VirtualMachineInfo>> GetVirtualMachinesForServiceAsync(HostedService hostedService)
+        {
+            try
+            {
+                var getProductionDeploymentRequest = new GetProductionDeploymentRequest(this.client);
+                var deployment = await getProductionDeploymentRequest.Submit(hostedService.ServiceName);
+                if (deployment != null)
+                {
+                    return this.GetVirtualMachinesForDeployment(deployment, hostedService);
+                }
+            }
+            catch (AzureManagementException ex)
+            {
+                if (!string.Equals(ex.Code, "ResourceNotFound", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw;
+                }
+
+                // ignore if deployment was not found
+            }
+
+            return null;
+        }
 
         private List<VirtualMachineInfo> GetVirtualMachinesForDeployment(Deployment deployment, HostedService cloudService)
         {
