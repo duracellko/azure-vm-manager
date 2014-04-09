@@ -2,6 +2,41 @@
     ViewBag.Title = "Home";
 }
 
-<p>
-    @Html.ActionLink("List Virtual Machines", "Index", "VirtualMachines")
-</p>
+<div class="jumbotron">
+    <h1>Simple Azure Virtual Machines Manager</h1>
+    <p class="lead">Simple Azure Virtual Machines Manager is minimalistic portal to start and stop Azure virtual machines.</p>
+    <p>@Html.ActionLink("Enter \u00BB", "Index", "VirtualMachines", null, new { @class = "btn btn-primary btn-large" })</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            Simple Azure Virtual Machines Manager enables to start, stop and connect to virtual machines in Microsoft Azure.
+            It might be very useful in cases:
+        </p>
+        <ul>
+            <li>You use Microsoft Azure for software testing.</li>
+            <li>You want your virtual machines to run only when needed.</li>
+            <li>You want people to be able to start/stop virtual machines without access to full Azure Portal.</li>
+        </ul>
+        <p><a class="btn btn-default" href="https://azurevmmng.codeplex.com/">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Azure Portal</h2>
+        <p>
+            Azure Portal provides full management of your cloud services, virtual machines, web sites, storage, databases, virtual networks
+            and much more.
+        </p>
+        <p><a class="btn btn-default" href="https://manage.windowsazure.com/">Azure Portal &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Microsoft Azure</h2>
+        <p>
+            Azure is an open and flexible cloud platform that enables you to quickly build, deploy and manage applications across
+            a global network of Microsoft-managed datacenters. You can build applications using any language, tool or framework.
+            And you can integrate your public cloud applications with your existing IT environment.
+        </p>
+        <p><a class="btn btn-default" href="http://azure.microsoft.com/">Learn more &raquo;</a></p>
+    </div>
+</div>

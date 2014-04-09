@@ -128,7 +128,7 @@
   </data>
   <data name="Header" xml:space="preserve">
     <value>Simple password utility.
-Encrypts password for web.config of your Windows Azure Virtual Machines Manager.
+Encrypts password for web.config of your Simple Azure Virtual Machines Manager.
 Copyright © Duracellko 2014</value>
   </data>
 </root>
