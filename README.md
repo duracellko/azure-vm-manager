@@ -9,8 +9,8 @@ It enables you to start, stop and connect to virtual machines in Microsoft Azure
 
 It is possible very easy to enable access only to users in your [Azure Active Directory](http://azure.microsoft.com/en-us/documentation/services/active-directory/).
 
-![Simple Azure Virtual Machines Manager screenshot](wiki/images/azure_vm_manager.png)
+![Simple Azure Virtual Machines Manager screenshot](https://github.com/duracellko/azure-vm-manager/wiki/images/azure_vm_manager.png)
 
 ## How to...
 
-How to install and use Simple Azure Virtual Machines Manager is described in [Documentation](wiki/documentation) section.
+How to install and use Simple Azure Virtual Machines Manager is described in [Documentation](https://github.com/duracellko/azure-vm-manager/wiki/documentation) section.
