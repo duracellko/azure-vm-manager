@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryContent.cs" />
+    <Compile Include="Client\AzureManagementBinaryResponse.cs" />
     <Compile Include="Client\AzureManagementClient.cs" />
     <Compile Include="Client\AzureManagementException.cs" />
+    <Compile Include="Client\AzureManagementResponse.cs" />
     <Compile Include="Client\IAzureManagementClient.cs" />
     <Compile Include="IWindowsAzureVmManager.cs" />
     <Compile Include="Model\AzureManagementRequestBase.cs" />

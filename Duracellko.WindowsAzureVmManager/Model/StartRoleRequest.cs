@@ -34,7 +34,7 @@ namespace Duracellko.WindowsAzureVmManager.Model
             );
         }
 
-        protected override object DeserializeResponse(XDocument xml)
+        protected override object DeserializeResponse(AzureManagementResponse response)
         {
             return null;
         }
