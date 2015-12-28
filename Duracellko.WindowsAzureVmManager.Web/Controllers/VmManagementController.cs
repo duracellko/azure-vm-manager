@@ -37,7 +37,7 @@ namespace Duracellko.WindowsAzureVmManager.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<bool> StartVM(string id, string cloudService)
+        public async Task<string> StartVM(string id, string cloudService)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -52,7 +52,7 @@ namespace Duracellko.WindowsAzureVmManager.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<bool> ShutdownVM(string id, string cloudService)
+        public async Task<string> ShutdownVM(string id, string cloudService)
         {
             if (string.IsNullOrEmpty(id))
             {
