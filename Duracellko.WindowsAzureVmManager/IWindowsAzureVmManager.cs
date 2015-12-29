@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Duracellko.WindowsAzureVmManager.Model;
 
 namespace Duracellko.WindowsAzureVmManager
 {
     public interface IWindowsAzureVmManager
     {
         Task<IEnumerable<VirtualMachineInfo>> GetVirtualMachines();
+
+        Task<Operation> GetOperationStatus(string requestId);
 
         Task<string> StartVirtualMachine(string name, string cloudServiceName);
 

@@ -37,6 +37,26 @@ namespace Duracellko.WindowsAzureVmManager.Web.Controllers
         }
 
         [HttpGet]
+        [ActionName("Operation")]
+        public async Task<OperationInfo> GetOperationInfo(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            var operation = await this.manager.GetOperationStatus(id);
+            var result = new OperationInfo()
+            {
+                RequestId = operation.RequestId,
+                Status = operation.Status,
+                ErrorCode = operation.ErrorCode,
+                ErrorMessage = operation.ErrorMessage
+            };
+
+            return result;
+        }
+
+        [HttpGet]
         public async Task<string> StartVM(string id, string cloudService)
         {
             if (string.IsNullOrEmpty(id))
