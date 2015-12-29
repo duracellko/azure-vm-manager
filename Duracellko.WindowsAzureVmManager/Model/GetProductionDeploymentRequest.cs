@@ -20,8 +20,9 @@ namespace Duracellko.WindowsAzureVmManager.Model
             return string.Format("services/hostedservices/{0}/deploymentslots/production", request);
         }
 
-        protected override Deployment DeserializeResponse(XDocument xml)
+        protected override Deployment DeserializeResponse(AzureManagementResponse response)
         {
+            var xml = response.Body;
             var result = new Deployment()
             {
                 Name = (string)xml.Root.Element(WindowsAzureNamespace + "Name"),

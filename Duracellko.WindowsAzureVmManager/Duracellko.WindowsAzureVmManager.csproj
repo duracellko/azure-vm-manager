@@ -43,18 +43,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryContent.cs" />
+    <Compile Include="Client\AzureManagementBinaryResponse.cs" />
     <Compile Include="Client\AzureManagementClient.cs" />
     <Compile Include="Client\AzureManagementException.cs" />
+    <Compile Include="Client\AzureManagementResponse.cs" />
     <Compile Include="Client\IAzureManagementClient.cs" />
     <Compile Include="IWindowsAzureVmManager.cs" />
+    <Compile Include="Model\AzureManagementHeaders.cs" />
     <Compile Include="Model\AzureManagementRequestBase.cs" />
     <Compile Include="Manager\VirtualMachinesManager.cs" />
     <Compile Include="Manager\VmManagerConfiguration.cs" />
     <Compile Include="Model\Deployment.cs" />
     <Compile Include="Model\GetCloudServicesRequest.cs" />
+    <Compile Include="Model\GetOperationStatusRequest.cs" />
     <Compile Include="Model\GetProductionDeploymentRequest.cs" />
     <Compile Include="Model\HostedService.cs" />
     <Compile Include="Model\HostedServices.cs" />
+    <Compile Include="Model\Operation.cs" />
+    <Compile Include="Model\OperationStatus.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\RoleIdentifier.cs" />
     <Compile Include="Model\RoleInstance.cs" />

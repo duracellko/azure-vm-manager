@@ -8,7 +8,7 @@ using Duracellko.WindowsAzureVmManager.Client;
 
 namespace Duracellko.WindowsAzureVmManager.Model
 {
-    public class StartRoleRequest : AzureManagementRequestBase<RoleIdentifier, object>
+    public class StartRoleRequest : AzureManagementRequestBase<RoleIdentifier, string>
     {
         public StartRoleRequest(IAzureManagementClient client)
             : base(client)
@@ -34,9 +34,9 @@ namespace Duracellko.WindowsAzureVmManager.Model
             );
         }
 
-        protected override object DeserializeResponse(XDocument xml)
+        protected override string DeserializeResponse(AzureManagementResponse response)
         {
-            return null;
+            return response.Headers.GetHeaderValue(AzureManagementHeaders.RequestId);
         }
     }
 }

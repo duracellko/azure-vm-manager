@@ -14,12 +14,21 @@ namespace Duracellko.WindowsAzureVmManager.Client
         private const string AzureManagementUrlPattern = "https://management.core.windows.net/{0}/{1}";
         private const string AzureManagementVersion = "2013-11-01";
 
-        public static WebRequest CreateRequest(string subscriptionId, string path, X509Certificate2 certificate)
+        public static WebRequest CreateRequest(string subscriptionId, string path, X509Certificate2 certificate, IDictionary<string, string> headers)
         {
             var requestUrl = string.Format(AzureManagementUrlPattern, subscriptionId, path);
             var request = WebRequest.CreateHttp(requestUrl);
             request.Headers.Add("x-ms-version", AzureManagementVersion);
             request.ContentType = "application/xml";
+
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+            }
+
             request.ClientCertificates.Add(certificate);
 
             return request;

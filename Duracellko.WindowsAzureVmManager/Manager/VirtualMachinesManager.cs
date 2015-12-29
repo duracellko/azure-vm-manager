@@ -44,7 +44,18 @@ namespace Duracellko.WindowsAzureVmManager.Manager
             return virtualMachines.Where(c => c != null).SelectMany(c => c).ToList();
         }
 
-        public async Task<bool> StartVirtualMachine(string name, string cloudServiceName)
+        public async Task<Operation> GetOperationStatus(string requestId)
+        {
+            if (string.IsNullOrEmpty(requestId))
+            {
+                throw new ArgumentNullException(nameof(requestId));
+            }
+
+            var getOperationStatusRequest = new GetOperationStatusRequest(this.client);
+            return await getOperationStatusRequest.Submit(requestId);
+        }
+
+        public async Task<string> StartVirtualMachine(string name, string cloudServiceName)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -68,12 +79,10 @@ namespace Duracellko.WindowsAzureVmManager.Manager
 
             var roleIdentifier = new RoleIdentifier(cloudServiceName, deployment.Name, name);
             var startRequest = new StartRoleRequest(this.client);
-            await startRequest.Submit(roleIdentifier);
-
-            return true;
+            return await startRequest.Submit(roleIdentifier);
         }
 
-        public async Task<bool> StopVirtualMachine(string name, string cloudServiceName)
+        public async Task<string> StopVirtualMachine(string name, string cloudServiceName)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -97,9 +106,7 @@ namespace Duracellko.WindowsAzureVmManager.Manager
 
             var roleIdentifier = new RoleIdentifier(cloudServiceName, deployment.Name, name);
             var shutdownRequest = new ShutdownRoleRequest(this.client);
-            await shutdownRequest.Submit(roleIdentifier);
-
-            return true;
+            return await shutdownRequest.Submit(roleIdentifier);
         }
 
         public async Task<BinaryContent> GetRemoteDesktopConnection(string name, string cloudServiceName)

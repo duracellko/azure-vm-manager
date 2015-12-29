@@ -20,9 +20,10 @@ namespace Duracellko.WindowsAzureVmManager.Model
             return "services/hostedservices";
         }
 
-        protected override HostedServices DeserializeResponse(XDocument xml)
+        protected override HostedServices DeserializeResponse(AzureManagementResponse response)
         {
             var result = new HostedServices();
+            var xml = response.Body;
 
             foreach (var hostedServiceElement in xml.Root.Elements(WindowsAzureNamespace + "HostedService"))
             {

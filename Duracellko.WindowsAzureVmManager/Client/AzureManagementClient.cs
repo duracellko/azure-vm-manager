@@ -41,14 +41,14 @@ namespace Duracellko.WindowsAzureVmManager.Client
 
         #region IAzureManagementClient
 
-        public Task<XDocument> GetResponseAsync(string path)
+        public Task<AzureManagementResponse> GetResponseAsync(string path)
         {
-            return this.GetResponseAsync(path, null);
+            return this.GetResponseAsync(path, null, null);
         }
 
-        public async Task<XDocument> GetResponseAsync(string path, XDocument request)
+        public async Task<AzureManagementResponse> GetResponseAsync(string path, XDocument request, IDictionary<string, string> headers = null)
         {
-            var webRequest = RequestHelper.CreateRequest(this.SubscriptionId, path, this.certificate.Value);
+            var webRequest = RequestHelper.CreateRequest(this.SubscriptionId, path, this.certificate.Value, headers);
             
             if (request != null)
             {
@@ -63,15 +63,17 @@ namespace Duracellko.WindowsAzureVmManager.Client
             {
                 using (var webResponse = await webRequest.GetResponseAsync())
                 {
-                    if (webResponse.ContentLength == 0)
+                    XDocument body = null;
+                    var responseHeaders = ConvertHeaders(webResponse);
+                    if (webResponse.ContentLength != 0)
                     {
-                        return null;
+                        using (var responseStream = webResponse.GetResponseStream())
+                        {
+                            body = XDocument.Load(responseStream);
+                        }
                     }
 
-                    using (var responseStream = webResponse.GetResponseStream())
-                    {
-                        return XDocument.Load(responseStream);
-                    }
+                    return new AzureManagementResponse(body, responseHeaders);
                 }
             }
             catch (WebException ex)
@@ -91,18 +93,19 @@ namespace Duracellko.WindowsAzureVmManager.Client
             }
         }
 
-        public async Task<BinaryContent> GetBinaryResponseAsync(string path)
+        public async Task<AzureManagementBinaryResponse> GetBinaryResponseAsync(string path, IDictionary<string, string> headers = null)
         {
-            var webRequest = RequestHelper.CreateRequest(this.SubscriptionId, path, this.certificate.Value);
+            var webRequest = RequestHelper.CreateRequest(this.SubscriptionId, path, this.certificate.Value, headers);
 
             try
             {
                 using (var webResponse = await webRequest.GetResponseAsync())
                 {
-                    BinaryContent result;
+                    AzureManagementBinaryResponse result;
+                    var responseHeaders = ConvertHeaders(webResponse);
                     if (webResponse.ContentLength == 0)
                     {
-                        result = new BinaryContent(emptyBytes);
+                        result = new AzureManagementBinaryResponse(emptyBytes, responseHeaders);
                     }
                     else
                     {
@@ -111,7 +114,7 @@ namespace Duracellko.WindowsAzureVmManager.Client
                             using (var memoryStream = new MemoryStream())
                             {
                                 await responseStream.CopyToAsync(memoryStream);
-                                result = new BinaryContent(memoryStream.ToArray());
+                                result = new AzureManagementBinaryResponse(memoryStream.ToArray(), responseHeaders);
                             }
                         }
                     }
@@ -135,6 +138,21 @@ namespace Duracellko.WindowsAzureVmManager.Client
                     throw new AzureManagementException(code, message, ex);
                 }
             }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static IDictionary<string, string> ConvertHeaders(WebResponse webResponse)
+        {
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string header in webResponse.Headers)
+            {
+                result[header] = webResponse.Headers[header];
+            }
+
+            return result;
         }
 
         #endregion

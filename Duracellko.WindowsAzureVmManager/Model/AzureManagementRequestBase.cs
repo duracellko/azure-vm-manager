@@ -48,9 +48,10 @@ namespace Duracellko.WindowsAzureVmManager.Model
         public async Task<TResponse> Submit(TRequest request)
         {
             var path = this.GetPath(request);
+            var requestHeaders = this.GetRequestHeaders(request);
             var requestXml = this.SerializeRequest(request);
-            var responseXml = await this.client.GetResponseAsync(path, requestXml);
-            return this.DeserializeResponse(responseXml);
+            var response = await this.client.GetResponseAsync(path, requestXml, requestHeaders);
+            return this.DeserializeResponse(response);
         }
 
         #endregion
@@ -64,7 +65,12 @@ namespace Duracellko.WindowsAzureVmManager.Model
             return null;
         }
 
-        protected abstract TResponse DeserializeResponse(XDocument xml);
+        protected virtual IDictionary<string, string> GetRequestHeaders(TRequest request)
+        {
+            return null;
+        }
+
+        protected abstract TResponse DeserializeResponse(AzureManagementResponse response);
 
         #endregion
     }

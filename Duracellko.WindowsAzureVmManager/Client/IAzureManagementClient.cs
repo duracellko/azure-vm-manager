@@ -9,10 +9,10 @@ namespace Duracellko.WindowsAzureVmManager.Client
 {
     public interface IAzureManagementClient
     {
-        Task<XDocument> GetResponseAsync(string path);
+        Task<AzureManagementResponse> GetResponseAsync(string path);
 
-        Task<XDocument> GetResponseAsync(string path, XDocument request);
+        Task<AzureManagementResponse> GetResponseAsync(string path, XDocument request, IDictionary<string, string> headers = null);
 
-        Task<BinaryContent> GetBinaryResponseAsync(string path);
+        Task<AzureManagementBinaryResponse> GetBinaryResponseAsync(string path, IDictionary<string, string> headers = null);
     }
 }

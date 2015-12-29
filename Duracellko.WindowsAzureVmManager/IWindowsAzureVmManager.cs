@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Duracellko.WindowsAzureVmManager.Model;
 
 namespace Duracellko.WindowsAzureVmManager
 {
@@ -10,9 +11,11 @@ namespace Duracellko.WindowsAzureVmManager
     {
         Task<IEnumerable<VirtualMachineInfo>> GetVirtualMachines();
 
-        Task<bool> StartVirtualMachine(string name, string cloudServiceName);
+        Task<Operation> GetOperationStatus(string requestId);
 
-        Task<bool> StopVirtualMachine(string name, string cloudServiceName);
+        Task<string> StartVirtualMachine(string name, string cloudServiceName);
+
+        Task<string> StopVirtualMachine(string name, string cloudServiceName);
 
         Task<BinaryContent> GetRemoteDesktopConnection(string name, string cloudServiceName);
     }
